@@ -3,8 +3,30 @@ from app.models.task import Task
 from app.db import db
 from app.routes.utility import create_model, get_models_with_filters, validate_model
 from datetime import datetime
+import os
+import requests
 
 tasks_bp = Blueprint("tasks_bp", __name__, url_prefix="/tasks")
+
+def send_slack_notification(task_title):
+    slack_token = os.environ.get("SLACK_BOT_TOKEN")
+    
+    if not slack_token:
+        return
+    
+    slack_url = "https://slack.com/api/chat.postMessage"
+    headers = {
+        "Authorization": f"Bearer {slack_token}"
+    }
+    data = {
+        "channel": "test-slack-api",
+        "text": f"Someone just completed the task {task_title}"
+    }
+    
+    try:
+        requests.post(slack_url, headers=headers, json=data)
+    except Exception:
+        pass
 
 @tasks_bp.get("")
 def get_tasks():
@@ -49,6 +71,8 @@ def mark_complete(task_id):
     
     task.completed_at = datetime.now()
     db.session.commit()
+    
+    send_slack_notification(task.title)
 
     return Response(status=204, mimetype="application/json")
 
