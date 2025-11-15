@@ -35,3 +35,11 @@ ADD test.sh /app
 
 # User defined requirements
 # RUN make init
+
+# Expose port and set environment variable
+ENV PORT=10000
+EXPOSE 10000
+
+# Start the Flask app with gunicorn
+# Use shell form so $PORT is expanded at runtime
+CMD ["sh", "-c", "gunicorn 'app:create_app()' --bind 0.0.0.0:$PORT --workers 3"]
