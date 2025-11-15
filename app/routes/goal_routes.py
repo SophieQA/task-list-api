@@ -2,7 +2,7 @@ from flask import Blueprint, Response, request
 from app.models.goal import Goal
 from app.models.task import Task
 from app.db import db
-from app.routes.utility import create_model, get_models_with_filters, validate_model
+from app.routes.route_utilities import create_model, get_models_with_filters, validate_model
 
 goals_bp = Blueprint("goals_bp", __name__, url_prefix="/goals")
 

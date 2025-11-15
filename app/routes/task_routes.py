@@ -1,7 +1,7 @@
 from flask import Blueprint, request, Response
 from app.models.task import Task
 from app.db import db
-from app.routes.utility import create_model, get_models_with_filters, validate_model
+from app.routes.route_utilities import create_model, get_models_with_filters, validate_model
 from datetime import datetime
 import os
 import requests
